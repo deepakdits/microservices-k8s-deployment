@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-daemon
+  namespace: argocd
+spec:
+  type: ClusterIP
+  selector:
+    app: git-daemon
+  ports:
+    - name: git
+      port: 9418
+      targetPort: 9418
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-daemon
+  namespace: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-daemon
+  template:
+    metadata:
+      labels:
+        app: git-daemon
+    spec:
+      containers:
+        - name: git-daemon
+          image: alpine/git
+          ports:
+            - containerPort: 9418
+          command: ["sh", "-c", "sleep 3600"]
+          volumeMounts:
+            - name: repo
+              mountPath: /repo
+      volumes:
+        - name: repo
+          emptyDir: {}

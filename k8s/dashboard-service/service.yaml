@@ -6,5 +6,5 @@ spec:
   selector:
     app: dashboard-service
   ports:
-  - port: 3003
-    targetPort: 3003
+  - port: 3002
+    targetPort: 3002

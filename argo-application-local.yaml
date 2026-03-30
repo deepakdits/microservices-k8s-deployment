@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: microservices-local-application
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  source:
+    repoURL: git://git-daemon.argocd.svc.cluster.local:9418/repo.git
+    targetRevision: HEAD
+    path: k8s
+    kustomize: {}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
